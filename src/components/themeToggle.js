@@ -27,12 +27,12 @@ const StyledThemeToggle = styled.button`
   &:hover,
   &:focus {
     outline: none;
-    background-color: var(--green-tint);
-    transform: translateY(-2px);
+    box-shadow: 4px 4px 0 0 var(--green);
+    transform: translate(-5px, -5px);
   }
 
   &:active {
-    transform: translateY(0);
+    transform: translate(0, 0);
   }
 `;
 
