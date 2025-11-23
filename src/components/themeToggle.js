@@ -23,16 +23,23 @@ const StyledThemeToggle = styled.button`
     height: 20px;
     transition: var(--transition);
   }
-
-  &:hover,
-  &:focus {
-    outline: none;
+  &:hover {
     box-shadow: 4px 4px 0 0 var(--green);
     transform: translate(-5px, -5px);
   }
 
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--green);
+    outline-offset: 3px;
+  }
+
   &:active {
     transform: translate(0, 0);
+    box-shadow: none;
   }
 `;
 
