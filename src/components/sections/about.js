@@ -151,21 +151,22 @@ const About = () => {
         <StyledText>
           <div>
             <p>
-              I am an open-source enthusiast with the passion and endurance to deliver highly
-              versatile low-level libraries and drivers. I have a wide array of experience, ranging
-              from printing custom circuit boards leading to creating Android applications that
-              interact with IoT devices. I take great care in system programming and user experience
-              of the things I work on.
+              I’m an open-source enthusiast focused on building reliable system software&mdash;from
+              Linux kernel drivers and firmware to userspace libraries for next-generation Neural
+              Processing Units (NPUs). My experience ranges from designing custom circuit boards to
+              creating Android applications that interact with IoT devices. I care deeply about
+              system programming, performance, and the developer experience of the tools I build.
             </p>
             <p>
-              I have completed my master’s in Electrical and Computer Engineering with a
-              specialization in Embedded Systems from{' '}
-              <a href="https://www.pdx.edu/">Portland State University, Oregon</a>. Currently, at
-              Xilinx, I am working on building libraries and drivers for the industry’s first{' '}
+              I completed my M.S. in Electrical and Computer Engineering with a specialization in
+              Embedded Systems at{' '}
+              <a href="https://www.pdx.edu/">Portland State University, Oregon</a>. At{' '}
+              <a href="https://www.xilinx.com/">Xilinx</a>, I build libraries and drivers for the
+              industry’s first{' '}
               <a href="https://www.xilinx.com/products/silicon-devices/acap/versal.html">
-                ACAP (Adaptive Compute Acceleration Platform).
-              </a>{' '}
-              Previously, at Tesla, I have developed validation frameworks for automotive use-case.
+                ACAP (Adaptive Compute Acceleration Platform)
+              </a>
+              . Previously at Tesla, I developed validation frameworks for automotive use cases.
             </p>
             <p>Here are a few technologies I've been working with recently:</p>
           </div>
