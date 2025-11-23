@@ -17,15 +17,23 @@ const StyledThemeToggle = styled.button`
   transition: var(--transition);
   width: 42px;
   height: 42px;
+  /* Better touch target for mobile */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 
   svg {
     width: 20px;
     height: 20px;
     transition: var(--transition);
+    pointer-events: none;
   }
-  &:hover {
-    box-shadow: 4px 4px 0 0 var(--green);
-    transform: translate(-5px, -5px);
+
+  /* Hover effects only for devices that support hover */
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      box-shadow: 4px 4px 0 0 var(--green);
+      transform: translate(-5px, -5px);
+    }
   }
 
   &:focus {

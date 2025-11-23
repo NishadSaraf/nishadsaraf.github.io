@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { navLinks } from '@config';
 import { KEY_CODES } from '@utils';
 import { useOnClickOutside } from '@hooks';
+import { ThemeToggle } from '@components';
 
 const StyledMenu = styled.div`
   display: none;
@@ -155,6 +156,22 @@ const StyledSidebar = styled.aside`
   }
 `;
 
+const StyledMobileThemeToggle = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+
+  button {
+    width: 50px;
+    height: 50px;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+`;
+
 const Menu = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -168,7 +185,10 @@ const Menu = () => {
   let lastFocusableEl;
 
   const setFocusables = () => {
-    menuFocusables = [buttonRef.current, ...Array.from(navRef.current.querySelectorAll('a'))];
+    menuFocusables = [
+      buttonRef.current,
+      ...Array.from(navRef.current.querySelectorAll('a, button')),
+    ];
     firstFocusableEl = menuFocusables[0];
     lastFocusableEl = menuFocusables[menuFocusables.length - 1];
   };
@@ -269,6 +289,10 @@ const Menu = () => {
             <a href="/resume.pdf" className="resume-link">
               Resume
             </a>
+
+            <StyledMobileThemeToggle>
+              <ThemeToggle />
+            </StyledMobileThemeToggle>
           </nav>
         </StyledSidebar>
       </div>
