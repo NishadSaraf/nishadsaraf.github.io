@@ -81,9 +81,12 @@ const StyledPic = styled.div`
     .img {
       position: relative;
       border-radius: var(--border-radius);
-      mix-blend-mode: multiply;
       filter: grayscale(100%) contrast(1);
       transition: var(--transition);
+
+      [data-theme='dark'] & {
+        mix-blend-mode: multiply;
+      }
     }
 
     &:before,
@@ -100,8 +103,14 @@ const StyledPic = styled.div`
     &:before {
       top: 0;
       left: 0;
-      background-color: var(--navy);
-      mix-blend-mode: screen;
+      background-color: var(--green);
+      opacity: 0.3;
+
+      [data-theme='dark'] & {
+        background-color: var(--navy);
+        mix-blend-mode: screen;
+        opacity: 1;
+      }
     }
 
     &:after {

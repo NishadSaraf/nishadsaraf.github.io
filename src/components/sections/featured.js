@@ -283,21 +283,34 @@ const StyledProject = styled.li`
         bottom: 0;
         z-index: 3;
         transition: var(--transition);
-        background-color: var(--navy);
-        mix-blend-mode: screen;
+        background-color: var(--green);
+        opacity: 0.3;
+
+        [data-theme='dark'] & {
+          background-color: var(--navy);
+          mix-blend-mode: screen;
+          opacity: 1;
+        }
       }
     }
 
     .img {
       border-radius: var(--border-radius);
-      mix-blend-mode: multiply;
       filter: grayscale(100%) contrast(1) brightness(90%);
+
+      [data-theme='dark'] & {
+        mix-blend-mode: multiply;
+      }
 
       @media (max-width: 768px) {
         object-fit: cover;
         width: auto;
         height: 100%;
-        filter: grayscale(100%) contrast(1) brightness(50%);
+        filter: grayscale(100%) contrast(1) brightness(80%);
+
+        [data-theme='dark'] & {
+          filter: grayscale(100%) contrast(1) brightness(50%);
+        }
       }
     }
   }

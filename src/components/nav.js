@@ -6,7 +6,7 @@ import styled, { css } from 'styled-components';
 import { navLinks } from '@config';
 import { loaderDelay } from '@utils';
 import { useScrollDirection, usePrefersReducedMotion } from '@hooks';
-import { Menu } from '@components';
+import { Menu, ThemeToggle } from '@components';
 import { IconLogo, IconHex } from '@components/icons';
 
 const StyledHeader = styled.header`
@@ -17,12 +17,12 @@ const StyledHeader = styled.header`
   padding: 0px 50px;
   width: 100%;
   height: var(--nav-height);
-  background-color: rgba(10, 25, 47, 0.85);
+  background-color: var(--navy);
   filter: none !important;
   pointer-events: auto !important;
   user-select: auto !important;
   backdrop-filter: blur(10px);
-  transition: var(--transition);
+  transition: var(--transition), background-color 0.3s ease;
 
   @media (max-width: 1080px) {
     padding: 0 40px;
@@ -38,7 +38,7 @@ const StyledHeader = styled.header`
       css`
         height: var(--nav-scroll-height);
         transform: translateY(0px);
-        background-color: rgba(10, 25, 47, 0.85);
+        background-color: var(--navy);
         box-shadow: 0 10px 30px -10px var(--navy-shadow);
       `};
 
@@ -228,6 +228,7 @@ const Nav = ({ isHome }) => {
                   ))}
               </ol>
               <div>{ResumeLink}</div>
+              <ThemeToggle />
             </StyledLinks>
 
             <Menu />
@@ -262,6 +263,17 @@ const Nav = ({ isHome }) => {
                   <CSSTransition classNames={fadeDownClass} timeout={timeout}>
                     <div style={{ transitionDelay: `${isHome ? navLinks.length * 100 : 0}ms` }}>
                       {ResumeLink}
+                    </div>
+                  </CSSTransition>
+                )}
+              </TransitionGroup>
+
+              <TransitionGroup component={null}>
+                {isMounted && (
+                  <CSSTransition classNames={fadeDownClass} timeout={timeout}>
+                    <div
+                      style={{ transitionDelay: `${isHome ? (navLinks.length + 1) * 100 : 0}ms` }}>
+                      <ThemeToggle />
                     </div>
                   </CSSTransition>
                 )}
