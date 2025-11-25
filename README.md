@@ -88,39 +88,14 @@ npm run deploy
 
 ## 🎨 Color Palette
 
-| Color       | Hex                                                                |
-| ----------- | ------------------------------------------------------------------ |
-| Background  | ![#121215](https://via.placeholder.com/10/121215?text=+) `#121215` |
-| Dark BG     | ![#0D0D0D](https://via.placeholder.com/10/0D0D0D?text=+) `#0D0D0D` |
-| Primary     | ![#F5A623](https://via.placeholder.com/10/F5A623?text=+) `#F5A623` |
-| Secondary   | ![#6B8FA3](https://via.placeholder.com/10/6B8FA3?text=+) `#6B8FA3` |
-| Light Slate | ![#C5C5C5](https://via.placeholder.com/10/C5C5C5?text=+) `#C5C5C5` |
-| White       | ![#FAFAF8](https://via.placeholder.com/10/FAFAF8?text=+) `#FAFAF8` |
-
-## 📝 Adding Content
-
-### Featured Projects
-
-Create a new folder in `content/featured/` with an `index.md` file:
-
-```md
----
-date: '2024-01-01'
-title: 'Project Title'
-cover: './image.png'
-github: 'https://github.com/...'
-external: 'https://...'
-tech:
-  - Technology 1
-  - Technology 2
----
-
-Project description goes here.
-```
-
-### Work Experience
-
-Add new entries in `content/jobs/` following the existing format.
+| Color       | Hex       |
+| ----------- | --------- |
+| Background  | `#121215` |
+| Dark BG     | `#0D0D0D` |
+| Primary     | `#F5A623` |
+| Secondary   | `#6B8FA3` |
+| Light Slate | `#C5C5C5` |
+| White       | `#FAFAF8` |
 
 ## 📄 License
 
