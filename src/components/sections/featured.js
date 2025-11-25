@@ -227,7 +227,7 @@ const StyledProject = styled.li`
       li {
         margin: 0 8px 5px 0;
         color: var(--lightest-slate);
-        background: rgba(35, 35, 40, 0.8);
+        background: var(--lightest-navy);
       }
     }
   }

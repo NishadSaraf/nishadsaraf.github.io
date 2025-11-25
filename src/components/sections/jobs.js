@@ -199,13 +199,21 @@ const StyledTimelineItem = styled.div`
 
   /* Expanded state styling */
   .job-description {
-    max-height: ${({ isActive }) => (isActive ? '500px' : '0')};
+    max-height: ${({ isActive }) => (isActive ? '2000px' : '0')};
     overflow: hidden;
     transition: max-height 0.4s ease;
+
+    @media (max-width: 600px) {
+      max-height: ${({ isActive }) => (isActive ? '3000px' : '0')};
+    }
   }
 
   &.expanded .job-description {
-    max-height: 500px;
+    max-height: 2000px;
+
+    @media (max-width: 600px) {
+      max-height: 3000px;
+    }
   }
 `;
 
