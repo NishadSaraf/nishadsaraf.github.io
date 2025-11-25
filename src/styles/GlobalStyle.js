@@ -21,13 +21,13 @@ const GlobalStyle = createGlobalStyle`
   }
 
   ::selection {
-    background-color: var(--lightest-navy);
-    color: var(--lightest-slate);
+    background-color: rgba(245, 166, 35, 0.3);
+    color: var(--white);
   }
 
   /* Provide basic, default focus styles.*/
   :focus {
-    outline: 2px dashed var(--green);
+    outline: 2px solid var(--green);
     outline-offset: 3px;
   }
 
@@ -46,25 +46,29 @@ const GlobalStyle = createGlobalStyle`
     focus.
   */
   :focus-visible {
-    outline: 2px dashed var(--green);
+    outline: 2px solid var(--green);
     outline-offset: 3px;
   }
 
   /* Scrollbar Styles */
   html {
     scrollbar-width: thin;
-    scrollbar-color: var(--dark-slate) var(--navy);
+    scrollbar-color: var(--dark-slate) var(--dark-navy);
   }
   ::-webkit-scrollbar {
-    width: 12px;
+    width: 10px;
   }
   ::-webkit-scrollbar-track {
-    background: var(--navy);
+    background: var(--dark-navy);
   }
   ::-webkit-scrollbar-thumb {
-    background-color: var(--dark-slate);
-    border: 3px solid var(--navy);
+    background: linear-gradient(180deg, var(--dark-slate), var(--lightest-navy));
+    border: 2px solid var(--dark-navy);
     border-radius: 10px;
+    
+    &:hover {
+      background: linear-gradient(180deg, var(--slate), var(--dark-slate));
+    }
   }
 
   body {
@@ -78,7 +82,7 @@ const GlobalStyle = createGlobalStyle`
     color: var(--slate);
     font-family: var(--font-sans);
     font-size: var(--fz-xl);
-    line-height: 1.3;
+    line-height: 1.6;
     transition: background-color 0.3s ease, color 0.3s ease;
 
     @media (max-width: 480px) {
@@ -168,16 +172,20 @@ const GlobalStyle = createGlobalStyle`
     font-weight: 600;
     color: var(--lightest-slate);
     line-height: 1.1;
+    letter-spacing: -0.02em;
   }
 
   .big-heading {
     margin: 0;
     font-size: clamp(40px, 8vw, 80px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
   }
 
   .medium-heading {
     margin: 0;
-    font-size: clamp(40px, 8vw, 60px);
+    font-size: clamp(30px, 6vw, 60px);
+    font-weight: 600;
   }
 
   .numbered-heading {
@@ -186,23 +194,23 @@ const GlobalStyle = createGlobalStyle`
     position: relative;
     margin: 10px 0 40px;
     width: 100%;
-    font-size: clamp(26px, 5vw, var(--fz-heading));
+    font-size: clamp(24px, 5vw, var(--fz-heading));
     white-space: nowrap;
 
     &:before {
       position: relative;
-      bottom: 4px;
+      bottom: 2px;
       counter-increment: section;
       content: '0' counter(section) '.';
-      margin-right: 10px;
+      margin-right: 12px;
       color: var(--green);
       font-family: var(--font-mono);
       font-size: clamp(var(--fz-md), 3vw, var(--fz-xl));
-      font-weight: 400;
+      font-weight: 500;
 
       @media (max-width: 480px) {
         margin-bottom: -3px;
-        margin-right: 5px;
+        margin-right: 8px;
       }
     }
 
@@ -210,11 +218,11 @@ const GlobalStyle = createGlobalStyle`
       content: '';
       display: block;
       position: relative;
-      top: -5px;
+      top: 0;
       width: 300px;
       height: 1px;
       margin-left: 20px;
-      background-color: var(--lightest-navy);
+      background: linear-gradient(90deg, var(--lightest-navy), transparent);
 
       @media (max-width: 1080px) {
         width: 200px;
@@ -277,8 +285,9 @@ const GlobalStyle = createGlobalStyle`
   }
 
   input, textarea {
-    border-radius: 0;
+    border-radius: var(--border-radius);
     outline: 0;
+    font-family: var(--font-sans);
 
     &:focus {
       outline: 0;
@@ -305,7 +314,7 @@ const GlobalStyle = createGlobalStyle`
 
     & > code {
       background-color: var(--light-navy);
-      color: var(--white);
+      color: var(--green);
       font-size: var(--fz-sm);
       border-radius: var(--border-radius);
       padding: 0.3em 0.5em;
@@ -322,38 +331,44 @@ const GlobalStyle = createGlobalStyle`
         position: relative;
         padding-left: 30px;
         margin-bottom: 10px;
+        line-height: 1.5;
         &:before {
-          content: '▹';
+          content: '>';
           position: absolute;
           left: 0;
           color: var(--green);
+          font-family: var(--font-mono);
+          font-weight: 600;
         }
       }
     }
   }
 
   blockquote {
-    border-left-color: var(--green);
-    border-left-style: solid;
-    border-left-width: 1px;
+    border-left: 3px solid var(--green);
     margin-left: 0px;
     margin-right: 0px;
     padding-left: 1.5rem;
+    background: linear-gradient(90deg, var(--green-tint), transparent);
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
 
     p {
       font-style: italic;
-      font-size: 24px;
+      font-size: 20px;
+      color: var(--light-slate);
     }
   }
 
   hr {
-    background-color: var(--lightest-navy);
+    background: linear-gradient(90deg, var(--lightest-navy), transparent);
     height: 1px;
     border-width: 0px;
     border-style: initial;
     border-color: initial;
     border-image: initial;
-    margin: 1rem;
+    margin: 1.5rem 0;
   }
 
   code {
@@ -394,7 +409,7 @@ const GlobalStyle = createGlobalStyle`
     color: var(--green);
     font-family: var(--font-mono);
     font-size: var(--fz-md);
-    font-weight: 400;
+    font-weight: 500;
   }
 
   .subtitle {
@@ -402,7 +417,7 @@ const GlobalStyle = createGlobalStyle`
     margin: 0 0 20px 0;
     font-size: var(--fz-md);
     font-family: var(--font-mono);
-    font-weight: 400;
+    font-weight: 500;
     line-height: 1.5;
     @media (max-width: 1080px) {
       font-size: var(--fz-sm);
@@ -442,6 +457,20 @@ const GlobalStyle = createGlobalStyle`
 
   .gatsby-image-outer-wrapper {
     height: 100%;
+  }
+
+  /* Subtle noise texture overlay for depth */
+  #___gatsby::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.02;
+    z-index: 9999;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   }
 
   ${TransitionStyles};

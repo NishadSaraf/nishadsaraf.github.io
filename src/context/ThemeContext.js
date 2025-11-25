@@ -1,13 +1,16 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 
-const ThemeContext = createContext();
+// Default context value for SSR - prevents errors when context is accessed before provider mounts
+const defaultContextValue = {
+  theme: 'dark',
+  toggleTheme: () => {},
+};
+
+const ThemeContext = createContext(defaultContextValue);
 
 export const useTheme = () => {
   const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
-  }
   return context;
 };
 
@@ -15,6 +18,11 @@ export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState('dark');
 
   useEffect(() => {
+    // Only access browser APIs after mount (useEffect only runs client-side)
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     // Load theme from localStorage or use system preference
     const savedTheme = localStorage.getItem('theme');
 
@@ -32,6 +40,10 @@ export const ThemeProvider = ({ children }) => {
   }, []);
 
   const toggleTheme = () => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     const newTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(newTheme);
     document.documentElement.setAttribute('data-theme', newTheme);

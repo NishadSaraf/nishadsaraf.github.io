@@ -1,16 +1,16 @@
 import { css } from 'styled-components';
 
 const prismColors = {
-  bg: `#112340`,
-  lineHighlight: `#1d2d50`,
-  blue: `#5ccfe6`,
-  purple: `#c3a6ff`,
-  green: `#bae67e`,
-  yellow: `#ffd580`,
-  orange: `#ffae57`,
-  red: `#ef6b73`,
-  grey: `#a2aabc`,
-  comment: `#8695b799`,
+  bg: `#1A1A1E`,
+  lineHighlight: `#232328`,
+  blue: `#6B8FA3`,
+  purple: `#B48EAD`,
+  green: `#A3BE8C`,
+  yellow: `#F5A623`,
+  orange: `#D08770`,
+  red: `#BF616A`,
+  grey: `#C5C5C5`,
+  comment: `#6B6B70`,
 };
 
 // https://www.gatsbyjs.org/packages/gatsby-remark-prismjs
@@ -30,6 +30,7 @@ const PrismStyles = css`
     position: relative;
     font-family: var(--font-mono);
     font-size: var(--fz-md);
+    border: 1px solid var(--lightest-navy);
   }
 
   .gatsby-highlight code[class*='language-'],
@@ -67,11 +68,13 @@ const PrismStyles = css`
     padding: 1em 1.5em;
     font-family: var(--font-mono);
     font-size: var(--fz-xs);
+    font-weight: 500;
     background-color: ${prismColors.bg};
-    color: ${prismColors.grey};
+    color: var(--green);
     border-top-left-radius: var(--border-radius);
     border-top-right-radius: var(--border-radius);
-    border-bottom: 1px solid ${prismColors.lineHighlight};
+    border: 1px solid var(--lightest-navy);
+    border-bottom: none;
 
     & + .gatsby-highlight {
       margin-top: 0;
@@ -84,7 +87,7 @@ const PrismStyles = css`
   .gatsby-highlight-code-line {
     display: block;
     background-color: ${prismColors.lineHighlight};
-    border-left: 2px solid var(--green);
+    border-left: 3px solid var(--green);
     padding-left: calc(1em + 2px);
     padding-right: 1em;
     margin-right: -1.35em;
@@ -93,14 +96,15 @@ const PrismStyles = css`
 
   /* Language badges */
   .gatsby-highlight pre[class*='language-']::before {
-    background: var(--lightest-navy);
-    color: var(--white);
+    background: var(--green);
+    color: var(--dark-navy);
     font-size: var(--fz-xxs);
     font-family: var(--font-mono);
+    font-weight: 600;
     line-height: 1.5;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
-    border-radius: 0 0 3px 3px;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
     position: absolute;
     top: 0;
     left: 1.25rem;
@@ -155,6 +159,15 @@ const PrismStyles = css`
   .gatsby-highlight pre[class='language-flow']::before {
     content: 'flow';
   }
+  .gatsby-highlight pre[class='language-c']::before {
+    content: 'c';
+  }
+  .gatsby-highlight pre[class='language-cpp']::before {
+    content: 'c++';
+  }
+  .gatsby-highlight pre[class='language-python']::before {
+    content: 'py';
+  }
 
   /* Prism Styles */
   .token {
@@ -166,6 +179,7 @@ const PrismStyles = css`
   .token.doctype,
   .token.cdata {
     color: ${prismColors.comment};
+    font-style: italic;
   }
   .token.punctuation {
     color: ${prismColors.grey};

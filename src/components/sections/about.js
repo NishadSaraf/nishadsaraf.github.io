@@ -18,34 +18,50 @@ const StyledAboutSection = styled.section`
     }
   }
 `;
+
 const StyledText = styled.div`
+  p {
+    line-height: 1.7;
+  }
+
   ul.skills-list {
     display: grid;
     grid-template-columns: repeat(2, minmax(140px, 200px));
-    grid-gap: 0 10px;
+    grid-gap: 8px 20px;
     padding: 0;
-    margin: 20px 0 0 0;
+    margin: 25px 0 0 0;
     overflow: hidden;
     list-style: none;
 
     li {
       position: relative;
-      margin-bottom: 10px;
-      padding-left: 20px;
+      margin-bottom: 8px;
+      padding: 8px 12px 8px 28px;
       font-family: var(--font-mono);
       font-size: var(--fz-xs);
+      background: var(--light-navy);
+      border-radius: var(--border-radius);
+      border: 1px solid transparent;
+      transition: var(--transition);
 
       &:before {
-        content: '▹';
+        content: '>';
         position: absolute;
-        left: 0;
+        left: 10px;
         color: var(--green);
         font-size: var(--fz-sm);
-        line-height: 12px;
+        font-weight: 600;
+        line-height: 1.4;
+      }
+
+      &:hover {
+        border-color: var(--green);
+        transform: translateX(3px);
       }
     }
   }
 `;
+
 const StyledPic = styled.div`
   position: relative;
   max-width: 300px;
@@ -61,64 +77,65 @@ const StyledPic = styled.div`
     position: relative;
     width: 100%;
     border-radius: var(--border-radius);
-    background-color: var(--green);
 
     &:hover,
     &:focus {
       outline: 0;
-      transform: translate(-4px, -4px);
 
-      &:after {
-        transform: translate(8px, 8px);
+      .overlay {
+        opacity: 0;
       }
 
       .img {
         filter: none;
-        mix-blend-mode: normal;
+        transform: scale(1.02);
       }
     }
 
     .img {
       position: relative;
       border-radius: var(--border-radius);
-      filter: grayscale(100%) contrast(1);
-      transition: var(--transition);
-
-      [data-theme='dark'] & {
-        mix-blend-mode: multiply;
-      }
+      transition: all 0.4s ease;
+      display: block;
     }
 
-    &:before,
-    &:after {
+    /* Gradient overlay */
+    .overlay {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+      background: linear-gradient(
+        135deg,
+        rgba(245, 166, 35, 0.2) 0%,
+        rgba(107, 143, 163, 0.2) 100%
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Decorative border */
+    &:before {
       content: '';
       display: block;
       position: absolute;
       width: 100%;
       height: 100%;
       border-radius: var(--border-radius);
+      border: 2px solid var(--green);
+      top: 16px;
+      left: 16px;
+      z-index: -1;
       transition: var(--transition);
     }
+  }
 
-    &:before {
-      top: 0;
-      left: 0;
-      background-color: var(--green);
-      opacity: 0.3;
-
-      [data-theme='dark'] & {
-        background-color: var(--navy);
-        mix-blend-mode: screen;
-        opacity: 1;
-      }
-    }
-
-    &:after {
-      border: 2px solid var(--green);
-      top: 14px;
-      left: 14px;
-      z-index: -1;
-    }
+  &:hover .wrapper:before {
+    top: 12px;
+    left: 12px;
   }
 `;
 
@@ -151,7 +168,7 @@ const About = () => {
         <StyledText>
           <div>
             <p>
-              I’m an open-source enthusiast focused on building reliable system software&mdash;from
+              I'm an open-source enthusiast focused on building reliable system software&mdash;from
               Linux kernel drivers and firmware to userspace libraries for next-generation Neural
               Processing Units (NPUs). My experience ranges from designing custom circuit boards to
               creating Android applications that interact with IoT devices. I care deeply about
@@ -162,7 +179,7 @@ const About = () => {
               Embedded Systems at{' '}
               <a href="https://www.pdx.edu/">Portland State University, Oregon</a>. At{' '}
               <a href="https://www.xilinx.com/">Xilinx</a>, I build libraries and drivers for the
-              industry’s first{' '}
+              industry's first{' '}
               <a href="https://www.xilinx.com/products/silicon-devices/acap/versal.html">
                 ACAP (Adaptive Compute Acceleration Platform)
               </a>
@@ -186,6 +203,7 @@ const About = () => {
               formats={['AUTO', 'WEBP', 'AVIF']}
               alt="Headshot"
             />
+            <div className="overlay" />
           </div>
         </StyledPic>
       </div>

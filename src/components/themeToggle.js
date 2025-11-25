@@ -31,8 +31,13 @@ const StyledThemeToggle = styled.button`
   /* Hover effects only for devices that support hover */
   @media (hover: hover) and (pointer: fine) {
     &:hover {
-      box-shadow: 4px 4px 0 0 var(--green);
-      transform: translate(-5px, -5px);
+      background-color: var(--green-tint);
+      box-shadow: 0 0 15px rgba(245, 166, 35, 0.25);
+      transform: translateY(-2px);
+
+      svg {
+        transform: rotate(15deg);
+      }
     }
   }
 
@@ -46,7 +51,7 @@ const StyledThemeToggle = styled.button`
   }
 
   &:active {
-    transform: translate(0, 0);
+    transform: translateY(0);
     box-shadow: none;
   }
 `;

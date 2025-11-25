@@ -105,6 +105,7 @@ const StyledSidebar = styled.aside`
     transform: translateX(${props => (props.menuOpen ? 0 : 100)}vw);
     visibility: ${props => (props.menuOpen ? 'visible' : 'hidden')};
     transition: var(--transition);
+    border-left: 1px solid var(--lightest-navy);
   }
 
   nav {
@@ -138,6 +139,7 @@ const StyledSidebar = styled.aside`
         margin-bottom: 5px;
         color: var(--green);
         font-size: var(--fz-sm);
+        font-weight: 500;
       }
     }
 
@@ -145,6 +147,11 @@ const StyledSidebar = styled.aside`
       ${({ theme }) => theme.mixins.link};
       width: 100%;
       padding: 3px 20px 20px;
+      border-radius: var(--border-radius);
+
+      &:hover {
+        background: var(--green-tint);
+      }
     }
   }
 
@@ -164,6 +171,8 @@ const StyledMobileThemeToggle = styled.div`
   button {
     width: 50px;
     height: 50px;
+    background: var(--lightest-navy);
+    border-radius: var(--border-radius);
 
     svg {
       width: 24px;

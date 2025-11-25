@@ -14,11 +14,13 @@ const StyledProjectsSection = styled.section`
 
   h2 {
     font-size: clamp(24px, 5vw, var(--fz-heading));
+    font-weight: 600;
   }
 
   .archive-link {
     font-family: var(--font-mono);
     font-size: var(--fz-sm);
+    font-weight: 500;
     &:after {
       bottom: 0.1em;
     }
@@ -28,7 +30,7 @@ const StyledProjectsSection = styled.section`
     ${({ theme }) => theme.mixins.resetList};
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    grid-gap: 15px;
+    grid-gap: 20px;
     position: relative;
     margin-top: 50px;
 
@@ -53,6 +55,7 @@ const StyledProject = styled.li`
     &:focus-within {
       .project-inner {
         transform: translateY(-7px);
+        border-color: var(--green);
       }
     }
   }
@@ -72,13 +75,15 @@ const StyledProject = styled.li`
     padding: 2rem 1.75rem;
     border-radius: var(--border-radius);
     background-color: var(--light-navy);
+    border: 1px solid transparent;
     transition: var(--transition);
     overflow: auto;
   }
 
   .project-top {
     ${({ theme }) => theme.mixins.flexBetween};
-    margin-bottom: 35px;
+    margin-bottom: 30px;
+    width: 100%;
 
     .folder {
       color: var(--green);
@@ -96,7 +101,14 @@ const StyledProject = styled.li`
 
       a {
         ${({ theme }) => theme.mixins.flexCenter};
-        padding: 5px 7px;
+        padding: 8px;
+        border-radius: var(--border-radius);
+        transition: var(--transition);
+
+        &:hover {
+          color: var(--green);
+          background: var(--green-tint);
+        }
 
         &.external {
           svg {
@@ -118,9 +130,15 @@ const StyledProject = styled.li`
     margin: 0 0 10px;
     color: var(--lightest-slate);
     font-size: var(--fz-xxl);
+    font-weight: 600;
 
     a {
       position: static;
+      transition: var(--transition);
+
+      &:hover {
+        color: var(--green);
+      }
 
       &:before {
         content: '';
@@ -137,7 +155,8 @@ const StyledProject = styled.li`
 
   .project-description {
     color: var(--light-slate);
-    font-size: 17px;
+    font-size: 16px;
+    line-height: 1.6;
 
     a {
       ${({ theme }) => theme.mixins.inlineLink};
@@ -152,14 +171,20 @@ const StyledProject = styled.li`
     padding: 0;
     margin: 20px 0 0 0;
     list-style: none;
+    gap: 8px;
 
     li {
       font-family: var(--font-mono);
       font-size: var(--fz-xxs);
-      line-height: 1.75;
+      color: var(--slate);
+      padding: 4px 8px;
+      background: var(--lightest-navy);
+      border-radius: var(--border-radius);
+      transition: var(--transition);
 
-      &:not(:last-of-type) {
-        margin-right: 15px;
+      &:hover {
+        color: var(--green);
+        background: var(--green-tint);
       }
     }
   }

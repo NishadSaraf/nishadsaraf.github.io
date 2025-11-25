@@ -17,12 +17,16 @@ const StyledHeader = styled.header`
   padding: 0px 50px;
   width: 100%;
   height: var(--nav-height);
-  background-color: var(--navy);
+  background-color: var(--nav-bg);
   filter: none !important;
   pointer-events: auto !important;
   user-select: auto !important;
-  backdrop-filter: blur(10px);
-  transition: var(--transition), background-color 0.3s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition:
+    var(--transition),
+    background-color 0.3s ease;
+  border-bottom: 1px solid transparent;
 
   @media (max-width: 1080px) {
     padding: 0 40px;
@@ -37,8 +41,9 @@ const StyledHeader = styled.header`
       css`
         height: var(--nav-scroll-height);
         transform: translateY(0px);
-        background-color: var(--navy);
+        background-color: var(--nav-bg-scrolled);
         box-shadow: 0 10px 30px -10px var(--navy-shadow);
+        border-bottom: 1px solid var(--lightest-navy);
       `};
   }
 `;
@@ -90,9 +95,9 @@ const StyledNav = styled.nav`
       &:hover,
       &:focus {
         outline: 0;
-        transform: translate(-4px, -4px);
+        transform: scale(1.05);
         .hex-container {
-          transform: translate(4px, 3px);
+          filter: drop-shadow(0 0 8px rgba(245, 166, 35, 0.4));
         }
       }
     }
@@ -102,6 +107,7 @@ const StyledNav = styled.nav`
 const StyledLinks = styled.div`
   display: flex;
   align-items: center;
+  gap: 8px;
 
   @media (max-width: 768px) {
     display: none;
@@ -120,7 +126,9 @@ const StyledLinks = styled.div`
       font-size: var(--fz-xs);
 
       a {
-        padding: 10px;
+        padding: 10px 12px;
+        border-radius: var(--border-radius);
+        transition: var(--transition);
 
         &:before {
           content: '0' counter(item) '.';
@@ -129,13 +137,18 @@ const StyledLinks = styled.div`
           font-size: var(--fz-xxs);
           text-align: right;
         }
+
+        &:hover {
+          background-color: var(--green-tint);
+          color: var(--green);
+        }
       }
     }
   }
 
   .resume-button {
     ${({ theme }) => theme.mixins.smallButton};
-    margin-left: 15px;
+    margin-left: 10px;
     font-size: var(--fz-xs);
   }
 `;

@@ -9,8 +9,9 @@ const StyledFooter = styled.footer`
   flex-direction: column;
   height: auto;
   min-height: 70px;
-  padding: 15px;
+  padding: 20px;
   text-align: center;
+  background: linear-gradient(180deg, transparent, rgba(13, 13, 13, 0.5));
 `;
 
 const StyledSocialLinks = styled.div`
@@ -20,7 +21,7 @@ const StyledSocialLinks = styled.div`
     display: block;
     width: 100%;
     max-width: 270px;
-    margin: 0 auto 10px;
+    margin: 0 auto 15px;
     color: var(--light-slate);
   }
 
@@ -32,6 +33,14 @@ const StyledSocialLinks = styled.div`
 
     a {
       padding: 10px;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+
+      &:hover {
+        color: var(--green);
+        background: var(--green-tint);
+      }
+
       svg {
         width: 20px;
         height: 20px;
@@ -41,23 +50,41 @@ const StyledSocialLinks = styled.div`
 `;
 
 const StyledCredit = styled.div`
-  color: var(--light-slate);
+  color: var(--slate);
   font-family: var(--font-mono);
   font-size: var(--fz-xxs);
-  line-height: 1;
+  line-height: 1.5;
 
   a {
     padding: 10px;
+    color: var(--slate);
+    transition: var(--transition);
+
+    &:hover {
+      color: var(--green);
+    }
   }
 
   .github-stats {
     margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
 
     & > span {
       display: inline-flex;
       align-items: center;
-      margin: 0 7px;
+      padding: 4px 8px;
+      background: var(--light-navy);
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+
+      &:hover {
+        background: var(--green-tint);
+        color: var(--green);
+      }
     }
+
     svg {
       display: inline-block;
       margin-right: 5px;
@@ -104,7 +131,7 @@ const Footer = () => {
         </ul>
       </StyledSocialLinks>
 
-      <StyledCredit tabindex="-1">
+      <StyledCredit tabIndex="-1">
         <a href="https://github.com/bchiang7/v4">
           <div>Original design by Brittany Chiang</div>
 

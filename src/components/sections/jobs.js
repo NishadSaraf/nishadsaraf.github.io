@@ -1,166 +1,211 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
-import { CSSTransition } from 'react-transition-group';
-import styled from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import { srConfig } from '@config';
-import { KEY_CODES } from '@utils';
 import sr from '@utils/sr';
 import { usePrefersReducedMotion } from '@hooks';
 
-const StyledJobsSection = styled.section`
-  max-width: 700px;
+const pulse = keyframes`
+  0% {
+    box-shadow: 0 0 0 0 rgba(245, 166, 35, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(245, 166, 35, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(245, 166, 35, 0);
+  }
+`;
 
-  .inner {
-    display: flex;
+const StyledJobsSection = styled.section`
+  max-width: 900px;
+
+  .section-header {
+    margin-bottom: 50px;
+  }
+`;
+
+const StyledTimeline = styled.div`
+  position: relative;
+  padding-left: 30px;
+
+  /* Timeline vertical line */
+  &::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--green) 0%, var(--lightest-navy) 100%);
+    border-radius: 2px;
+  }
+
+  @media (max-width: 600px) {
+    padding-left: 25px;
+
+    &::before {
+      left: 5px;
+    }
+  }
+`;
+
+const StyledTimelineItem = styled.div`
+  position: relative;
+  padding-bottom: 50px;
+  opacity: ${({ isActive }) => (isActive ? 1 : 0.6)};
+  transition: opacity 0.3s ease;
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+
+  &:hover {
+    opacity: 1;
+  }
+
+  /* Timeline node */
+  .timeline-node {
+    position: absolute;
+    left: -30px;
+    top: 5px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: ${({ isActive }) => (isActive ? 'var(--green)' : 'var(--lightest-navy)')};
+    border: 3px solid var(--navy);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 2;
+
+    ${({ isActive }) =>
+    isActive &&
+      css`
+        animation: ${pulse} 2s infinite;
+      `}
+
+    &:hover {
+      background: var(--green);
+      transform: scale(1.2);
+    }
 
     @media (max-width: 600px) {
-      display: block;
-    }
-
-    // Prevent container from jumping
-    @media (min-width: 700px) {
-      min-height: 340px;
+      left: -25px;
+      width: 14px;
+      height: 14px;
     }
   }
-`;
 
-const StyledTabList = styled.div`
-  position: relative;
-  z-index: 3;
-  width: max-content;
-  padding: 0;
-  margin: 0;
-  list-style: none;
+  /* Content card */
+  .timeline-content {
+    background: var(--light-navy);
+    border-radius: var(--border-radius);
+    padding: 25px 30px;
+    border: 1px solid ${({ isActive }) => (isActive ? 'var(--green)' : 'transparent')};
+    transition: all 0.3s ease;
+    cursor: pointer;
 
-  @media (max-width: 600px) {
+    &:hover {
+      border-color: var(--green);
+      transform: translateX(5px);
+      box-shadow: 0 10px 30px -15px var(--navy-shadow);
+    }
+
+    @media (max-width: 600px) {
+      padding: 20px;
+    }
+  }
+
+  .timeline-header {
     display: flex;
-    overflow-x: auto;
-    width: calc(100% + 100px);
-    padding-left: 50px;
-    margin-left: -50px;
-    margin-bottom: 30px;
-  }
-  @media (max-width: 480px) {
-    width: calc(100% + 50px);
-    padding-left: 25px;
-    margin-left: -25px;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 5px;
   }
 
-  li {
-    &:first-of-type {
-      @media (max-width: 600px) {
-        margin-left: 50px;
-      }
-      @media (max-width: 480px) {
-        margin-left: 25px;
-      }
-    }
-    &:last-of-type {
-      @media (max-width: 600px) {
-        padding-right: 50px;
-      }
-      @media (max-width: 480px) {
-        padding-right: 25px;
-      }
-    }
-  }
-`;
-
-const StyledTabButton = styled.button`
-  ${({ theme }) => theme.mixins.link};
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: var(--tab-height);
-  padding: 0 20px 2px;
-  border-left: 2px solid var(--lightest-navy);
-  background-color: transparent;
-  color: ${({ isActive }) => (isActive ? 'var(--green)' : 'var(--slate)')};
-  font-family: var(--font-mono);
-  font-size: var(--fz-xs);
-  text-align: left;
-  white-space: nowrap;
-
-  @media (max-width: 768px) {
-    padding: 0 15px 2px;
-  }
-  @media (max-width: 600px) {
-    ${({ theme }) => theme.mixins.flexCenter};
-    min-width: 120px;
-    padding: 0 15px;
-    border-left: 0;
-    border-bottom: 2px solid var(--lightest-navy);
-    text-align: center;
+  .job-title {
+    font-size: var(--fz-xl);
+    font-weight: 600;
+    color: var(--lightest-slate);
+    margin: 0;
   }
 
-  &:hover,
-  &:focus {
-    background-color: var(--light-navy);
-  }
-`;
-
-const StyledHighlight = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 10;
-  width: 2px;
-  height: var(--tab-height);
-  border-radius: var(--border-radius);
-  background: var(--green);
-  transform: translateY(calc(${({ activeTabId }) => activeTabId} * var(--tab-height)));
-  transition: transform 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
-  transition-delay: 0.1s;
-
-  @media (max-width: 600px) {
-    top: auto;
-    bottom: 0;
-    width: 100%;
-    max-width: var(--tab-width);
-    height: 2px;
-    margin-left: 50px;
-    transform: translateX(calc(${({ activeTabId }) => activeTabId} * var(--tab-width)));
-  }
-  @media (max-width: 480px) {
-    margin-left: 25px;
-  }
-`;
-
-const StyledTabPanels = styled.div`
-  position: relative;
-  width: 100%;
-  margin-left: 20px;
-
-  @media (max-width: 600px) {
-    margin-left: 0;
-  }
-`;
-
-const StyledTabPanel = styled.div`
-  width: 100%;
-  height: auto;
-  padding: 10px 5px;
-
-  ul {
-    ${({ theme }) => theme.mixins.fancyList};
-  }
-
-  h3 {
-    margin-bottom: 2px;
-    font-size: var(--fz-xxl);
+  .company {
+    color: var(--green);
     font-weight: 500;
-    line-height: 1.3;
 
-    .company {
+    a {
       color: var(--green);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
     }
   }
 
-  .range {
-    margin-bottom: 25px;
-    color: var(--light-slate);
+  .timeline-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
     font-family: var(--font-mono);
     font-size: var(--fz-xs);
+    color: var(--slate);
+  }
+
+  .date-range {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    &::before {
+      content: '';
+      width: 12px;
+      height: 12px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239A9A9A' stroke-width='2'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E")
+        no-repeat center;
+      background-size: contain;
+    }
+  }
+
+  .location {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    &::before {
+      content: '';
+      width: 12px;
+      height: 12px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239A9A9A' stroke-width='2'%3E%3Cpath d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'%3E%3C/path%3E%3Ccircle cx='12' cy='10' r='3'%3E%3C/circle%3E%3C/svg%3E")
+        no-repeat center;
+      background-size: contain;
+    }
+  }
+
+  .job-description {
+    ul {
+      ${({ theme }) => theme.mixins.fancyList};
+      margin: 0;
+    }
+
+    p {
+      margin: 0 0 10px 0;
+    }
+  }
+
+  /* Expanded state styling */
+  .job-description {
+    max-height: ${({ isActive }) => (isActive ? '500px' : '0')};
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+
+  &.expanded .job-description {
+    max-height: 500px;
   }
 `;
 
@@ -189,10 +234,9 @@ const Jobs = () => {
 
   const jobsData = data.jobs.edges;
 
-  const [activeTabId, setActiveTabId] = useState(0);
-  const [tabFocus, setTabFocus] = useState(null);
-  const tabs = useRef([]);
+  const [activeJobId, setActiveJobId] = useState(0);
   const revealContainer = useRef(null);
+  const timelineItems = useRef([]);
   const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
@@ -201,108 +245,61 @@ const Jobs = () => {
     }
 
     sr.reveal(revealContainer.current, srConfig());
+
+    // Stagger reveal timeline items
+    timelineItems.current.forEach((item, i) => {
+      if (item) {
+        sr.reveal(item, srConfig(i * 100));
+      }
+    });
   }, []);
 
-  const focusTab = () => {
-    if (tabs.current[tabFocus]) {
-      tabs.current[tabFocus].focus();
-      return;
-    }
-    // If we're at the end, go to the start
-    if (tabFocus >= tabs.current.length) {
-      setTabFocus(0);
-    }
-    // If we're at the start, move to the end
-    if (tabFocus < 0) {
-      setTabFocus(tabs.current.length - 1);
-    }
-  };
-
-  // Only re-run the effect if tabFocus changes
-  useEffect(() => focusTab(), [tabFocus]);
-
-  // Focus on tabs when using up & down arrow keys
-  const onKeyDown = e => {
-    switch (e.key) {
-      case KEY_CODES.ARROW_UP: {
-        e.preventDefault();
-        setTabFocus(tabFocus - 1);
-        break;
-      }
-
-      case KEY_CODES.ARROW_DOWN: {
-        e.preventDefault();
-        setTabFocus(tabFocus + 1);
-        break;
-      }
-
-      default: {
-        break;
-      }
-    }
+  const handleItemClick = index => {
+    setActiveJobId(activeJobId === index ? -1 : index);
   };
 
   return (
     <StyledJobsSection id="jobs" ref={revealContainer}>
-      <h2 className="numbered-heading">Where I’ve Worked</h2>
+      <h2 className="numbered-heading section-header">Career Journey</h2>
 
-      <div className="inner">
-        <StyledTabList role="tablist" aria-label="Job tabs" onKeyDown={e => onKeyDown(e)}>
-          {jobsData &&
-            jobsData.map(({ node }, i) => {
-              const { company } = node.frontmatter;
-              return (
-                <StyledTabButton
-                  key={i}
-                  isActive={activeTabId === i}
-                  onClick={() => setActiveTabId(i)}
-                  ref={el => (tabs.current[i] = el)}
-                  id={`tab-${i}`}
-                  role="tab"
-                  tabIndex={activeTabId === i ? '0' : '-1'}
-                  aria-selected={activeTabId === i ? true : false}
-                  aria-controls={`panel-${i}`}>
-                  <span>{company}</span>
-                </StyledTabButton>
-              );
-            })}
-          <StyledHighlight activeTabId={activeTabId} />
-        </StyledTabList>
+      <StyledTimeline>
+        {jobsData &&
+          jobsData.map(({ node }, i) => {
+            const { frontmatter, html } = node;
+            const { title, url, company, range, location } = frontmatter;
+            const isActive = activeJobId === i;
 
-        <StyledTabPanels>
-          {jobsData &&
-            jobsData.map(({ node }, i) => {
-              const { frontmatter, html } = node;
-              const { title, url, company, range } = frontmatter;
+            return (
+              <StyledTimelineItem
+                key={i}
+                ref={el => (timelineItems.current[i] = el)}
+                isActive={isActive}
+                className={isActive ? 'expanded' : ''}
+                onClick={() => handleItemClick(i)}>
+                <div className="timeline-node" />
 
-              return (
-                <CSSTransition key={i} in={activeTabId === i} timeout={250} classNames="fade">
-                  <StyledTabPanel
-                    id={`panel-${i}`}
-                    role="tabpanel"
-                    tabIndex={activeTabId === i ? '0' : '-1'}
-                    aria-labelledby={`tab-${i}`}
-                    aria-hidden={activeTabId !== i}
-                    hidden={activeTabId !== i}>
-                    <h3>
-                      <span>{title}</span>
-                      <span className="company">
-                        &nbsp;@&nbsp;
-                        <a href={url} className="inline-link">
-                          {company}
-                        </a>
-                      </span>
-                    </h3>
+                <div className="timeline-content">
+                  <div className="timeline-header">
+                    <h3 className="job-title">{title}</h3>
+                    <span className="company">
+                      @{' '}
+                      <a href={url} onClick={e => e.stopPropagation()}>
+                        {company}
+                      </a>
+                    </span>
+                  </div>
 
-                    <p className="range">{range}</p>
+                  <div className="timeline-meta">
+                    <span className="date-range">{range}</span>
+                    {location && <span className="location">{location}</span>}
+                  </div>
 
-                    <div dangerouslySetInnerHTML={{ __html: html }} />
-                  </StyledTabPanel>
-                </CSSTransition>
-              );
-            })}
-        </StyledTabPanels>
-      </div>
+                  <div className="job-description" dangerouslySetInnerHTML={{ __html: html }} />
+                </div>
+              </StyledTimelineItem>
+            );
+          })}
+      </StyledTimeline>
     </StyledJobsSection>
   );
 };

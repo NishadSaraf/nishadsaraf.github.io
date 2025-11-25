@@ -64,10 +64,10 @@ const StyledProject = styled.li`
       }
 
       li {
-        margin: 0 0 5px 20px;
+        margin: 0 0 5px 10px;
 
         @media (max-width: 768px) {
-          margin: 0 10px 5px 0;
+          margin: 0 8px 5px 0;
         }
       }
     }
@@ -120,12 +120,15 @@ const StyledProject = styled.li`
     color: var(--green);
     font-family: var(--font-mono);
     font-size: var(--fz-xs);
-    font-weight: 400;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
   }
 
   .project-title {
     color: var(--lightest-slate);
     font-size: clamp(24px, 5vw, 28px);
+    font-weight: 600;
 
     @media (min-width: 768px) {
       margin: 0 0 20px;
@@ -149,6 +152,14 @@ const StyledProject = styled.li`
         }
       }
     }
+
+    a {
+      transition: var(--transition);
+
+      &:hover {
+        color: var(--green);
+      }
+    }
   }
 
   .project-description {
@@ -158,12 +169,15 @@ const StyledProject = styled.li`
     padding: 25px;
     border-radius: var(--border-radius);
     background-color: var(--light-navy);
+    border: 1px solid var(--lightest-navy);
     color: var(--light-slate);
     font-size: var(--fz-lg);
+    line-height: 1.6;
 
     @media (max-width: 768px) {
       padding: 20px 0;
       background-color: transparent;
+      border: none;
       box-shadow: none;
 
       &:hover {
@@ -177,7 +191,7 @@ const StyledProject = styled.li`
 
     strong {
       color: var(--white);
-      font-weight: normal;
+      font-weight: 500;
     }
   }
 
@@ -191,19 +205,29 @@ const StyledProject = styled.li`
     list-style: none;
 
     li {
-      margin: 0 20px 5px 0;
-      color: var(--light-slate);
+      margin: 0 10px 5px 0;
+      padding: 4px 10px;
+      color: var(--slate);
       font-family: var(--font-mono);
-      font-size: var(--fz-xs);
+      font-size: var(--fz-xxs);
+      background: var(--lightest-navy);
+      border-radius: var(--border-radius);
       white-space: nowrap;
+      transition: var(--transition);
+
+      &:hover {
+        color: var(--green);
+        background: var(--green-tint);
+      }
     }
 
     @media (max-width: 768px) {
       margin: 10px 0;
 
       li {
-        margin: 0 10px 5px 0;
+        margin: 0 8px 5px 0;
         color: var(--lightest-slate);
+        background: rgba(35, 35, 40, 0.8);
       }
     }
   }
@@ -219,6 +243,13 @@ const StyledProject = styled.li`
     a {
       ${({ theme }) => theme.mixins.flexCenter};
       padding: 10px;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+
+      &:hover {
+        color: var(--green);
+        background: var(--green-tint);
+      }
 
       &.external {
         svg {
@@ -256,19 +287,22 @@ const StyledProject = styled.li`
     a {
       width: 100%;
       height: 100%;
-      background-color: var(--green);
       border-radius: var(--border-radius);
       vertical-align: middle;
+      overflow: hidden;
+      display: block;
 
       &:hover,
       &:focus {
-        background: transparent;
         outline: 0;
 
-        &:before,
+        &:before {
+          opacity: 0;
+        }
+
         .img {
-          background: transparent;
           filter: none;
+          transform: scale(1.03);
         }
       }
 
@@ -283,34 +317,24 @@ const StyledProject = styled.li`
         bottom: 0;
         z-index: 3;
         transition: var(--transition);
-        background-color: var(--green);
-        opacity: 0.3;
-
-        [data-theme='dark'] & {
-          background-color: var(--navy);
-          mix-blend-mode: screen;
-          opacity: 1;
-        }
+        background: linear-gradient(
+          135deg,
+          rgba(245, 166, 35, 0.15) 0%,
+          rgba(107, 143, 163, 0.15) 100%
+        );
+        border-radius: var(--border-radius);
       }
     }
 
     .img {
       border-radius: var(--border-radius);
-      filter: grayscale(100%) contrast(1) brightness(90%);
-
-      [data-theme='dark'] & {
-        mix-blend-mode: multiply;
-      }
+      transition: all 0.4s ease;
 
       @media (max-width: 768px) {
         object-fit: cover;
         width: auto;
         height: 100%;
-        filter: grayscale(100%) contrast(1) brightness(80%);
-
-        [data-theme='dark'] & {
-          filter: grayscale(100%) contrast(1) brightness(50%);
-        }
+        filter: grayscale(30%) brightness(80%);
       }
     }
   }
@@ -360,7 +384,7 @@ const Featured = () => {
   return (
     <section id="projects">
       <h2 className="numbered-heading" ref={revealTitle}>
-        Some Things I’ve Built
+        Some Things I've Built
       </h2>
 
       <StyledProjectsGrid>
