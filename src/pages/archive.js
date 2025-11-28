@@ -452,7 +452,9 @@ const formatDate = dateString => {
 };
 
 const getCommitHash = githubUrl => {
-  if (!githubUrl) {return '';}
+  if (!githubUrl) {
+    return '';
+  }
   const parts = githubUrl.split('/');
   const hash = parts[parts.length - 1];
   return hash.substring(0, 7);
@@ -479,21 +481,56 @@ const ArchivePage = ({ location, data }) => {
     return groups;
   }, [projects]);
 
-  const components = Object.keys(groupedProjects);
+  // Custom component ordering
+  const componentOrder = [
+    'Linux kernel',
+    'AMD XDNA driver',
+    'Userspace driver',
+    'Linux device tree generator',
+    'Yocto',
+    'Petalinux application',
+  ];
+
+  const components = useMemo(() => {
+    const allComponents = Object.keys(groupedProjects);
+    // Sort components based on custom order, put unlisted ones at the end
+    return allComponents.sort((a, b) => {
+      const indexA = componentOrder.indexOf(a);
+      const indexB = componentOrder.indexOf(b);
+
+      // If both are in the order list, sort by their position
+      if (indexA !== -1 && indexB !== -1) {
+        return indexA - indexB;
+      }
+      // If only a is in the list, it comes first
+      if (indexA !== -1) {
+        return -1;
+      }
+      // If only b is in the list, it comes first
+      if (indexB !== -1) {
+        return 1;
+      }
+      // If neither is in the list, sort alphabetically
+      return a.localeCompare(b);
+    });
+  }, [groupedProjects]);
 
   const filteredProjects = useMemo(() => {
-    if (activeFilter === 'all') {return groupedProjects;}
+    if (activeFilter === 'all') {
+      return groupedProjects;
+    }
     return { [activeFilter]: groupedProjects[activeFilter] };
   }, [activeFilter, groupedProjects]);
 
   useEffect(() => {
-    if (prefersReducedMotion) {return;}
+    if (prefersReducedMotion) {
+      return;
+    }
     sr.reveal(revealTitle.current, srConfig());
     sr.reveal(revealStats.current, srConfig(200, 0));
   }, [prefersReducedMotion]);
 
   const totalCommits = projects.length;
-  const uniqueComponents = components.length;
 
   return (
     <Layout location={location}>
@@ -514,8 +551,8 @@ const ArchivePage = ({ location, data }) => {
             <div className="stat-label">Total Contributions</div>
           </StatCard>
           <StatCard $accentColor="var(--accent-secondary)">
-            <div className="stat-number">{uniqueComponents}</div>
-            <div className="stat-label">Components</div>
+            <div className="stat-number">3</div>
+            <div className="stat-label">Patents</div>
           </StatCard>
           <StatCard $accentColor="var(--pink)">
             <div className="stat-number">{groupedProjects['Linux kernel']?.length || 0}</div>
@@ -567,56 +604,46 @@ const ArchivePage = ({ location, data }) => {
             <p>Try selecting a different filter</p>
           </EmptyState>
         ) : (
-          Object.entries(filteredProjects).map(([component, commits], sectionIndex) => {
-            const colors = componentColors[component] || {
-              bg: 'var(--green-tint)',
-              icon: 'var(--green)',
-            };
+          Object.entries(filteredProjects)
+            .sort(([componentA], [componentB]) => {
+              const indexA = componentOrder.indexOf(componentA);
+              const indexB = componentOrder.indexOf(componentB);
 
-            return (
-              <ComponentSection key={component} $delay={`${sectionIndex * 0.1}s`}>
-                <ComponentHeader $color={colors.bg} $iconColor={colors.icon}>
-                  <div className="icon-wrapper">
-                    <Icon name={componentIcons[component] || 'Folder'} />
-                  </div>
-                  <h2>{component}</h2>
-                  <span className="commit-count">
-                    {commits.length} commit{commits.length !== 1 ? 's' : ''}
-                  </span>
-                </ComponentHeader>
+              if (indexA !== -1 && indexB !== -1) {
+                return indexA - indexB;
+              }
+              if (indexA !== -1) {
+                return -1;
+              }
+              if (indexB !== -1) {
+                return 1;
+              }
+              return componentA.localeCompare(componentB);
+            })
+            .map(([component, commits], sectionIndex) => {
+              const colors = componentColors[component] || {
+                bg: 'var(--green-tint)',
+                icon: 'var(--green)',
+              };
 
-                {viewMode === 'grid' ? (
-                  <CommitsGrid>
-                    {commits.map((commit, i) => {
-                      const { github, title, date } = commit.frontmatter;
-                      return (
-                        <CommitCard key={i}>
-                          <div className="commit-date">{formatDate(date)}</div>
-                          <h3 className="commit-title">{title}</h3>
-                          <div className="commit-footer">
-                            {github && (
-                              <a
-                                href={github}
-                                className="commit-link"
-                                target="_blank"
-                                rel="noopener noreferrer">
-                                <Icon name="GitHub" />
-                                View commit
-                              </a>
-                            )}
-                            <span className="commit-hash">{getCommitHash(github)}</span>
-                          </div>
-                        </CommitCard>
-                      );
-                    })}
-                  </CommitsGrid>
-                ) : (
-                  <TimelineView>
-                    {commits.map((commit, i) => {
-                      const { github, title, date } = commit.frontmatter;
-                      return (
-                        <TimelineItem key={i} $delay={`${i * 0.05}s`}>
-                          <CommitCard>
+              return (
+                <ComponentSection key={component} $delay={`${sectionIndex * 0.1}s`}>
+                  <ComponentHeader $color={colors.bg} $iconColor={colors.icon}>
+                    <div className="icon-wrapper">
+                      <Icon name={componentIcons[component] || 'Folder'} />
+                    </div>
+                    <h2>{component}</h2>
+                    <span className="commit-count">
+                      {commits.length} commit{commits.length !== 1 ? 's' : ''}
+                    </span>
+                  </ComponentHeader>
+
+                  {viewMode === 'grid' ? (
+                    <CommitsGrid>
+                      {commits.map((commit, i) => {
+                        const { github, title, date } = commit.frontmatter;
+                        return (
+                          <CommitCard key={i}>
                             <div className="commit-date">{formatDate(date)}</div>
                             <h3 className="commit-title">{title}</h3>
                             <div className="commit-footer">
@@ -633,14 +660,40 @@ const ArchivePage = ({ location, data }) => {
                               <span className="commit-hash">{getCommitHash(github)}</span>
                             </div>
                           </CommitCard>
-                        </TimelineItem>
-                      );
-                    })}
-                  </TimelineView>
-                )}
-              </ComponentSection>
-            );
-          })
+                        );
+                      })}
+                    </CommitsGrid>
+                  ) : (
+                    <TimelineView>
+                      {commits.map((commit, i) => {
+                        const { github, title, date } = commit.frontmatter;
+                        return (
+                          <TimelineItem key={i} $delay={`${i * 0.05}s`}>
+                            <CommitCard>
+                              <div className="commit-date">{formatDate(date)}</div>
+                              <h3 className="commit-title">{title}</h3>
+                              <div className="commit-footer">
+                                {github && (
+                                  <a
+                                    href={github}
+                                    className="commit-link"
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    <Icon name="GitHub" />
+                                    View commit
+                                  </a>
+                                )}
+                                <span className="commit-hash">{getCommitHash(github)}</span>
+                              </div>
+                            </CommitCard>
+                          </TimelineItem>
+                        );
+                      })}
+                    </TimelineView>
+                  )}
+                </ComponentSection>
+              );
+            })
         )}
       </StyledArchivePage>
     </Layout>
@@ -658,7 +711,7 @@ export const pageQuery = graphql`
   {
     allMarkdownRemark(
       filter: { fileAbsolutePath: { regex: "/commits/" } }
-      sort: { fields: [frontmatter___component, frontmatter___date], order: [ASC, DESC] }
+      sort: { frontmatter: { date: DESC } }
     ) {
       edges {
         node {
