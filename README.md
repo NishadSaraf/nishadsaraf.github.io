@@ -23,7 +23,8 @@
 - **Content:** Markdown + GraphQL
 - **Animations:** [Anime.js](https://animejs.com/) + [ScrollReveal](https://scrollrevealjs.org/)
 - **Deployment:** GitHub Pages
-- **CI/CD:** Husky + lint-staged
+- **Package Manager:** npm
+- **Git Hooks:** Husky + lint-staged
 
 ## 🛠 Installation & Setup
 
@@ -37,7 +38,7 @@
 2. **Install dependencies**
 
    ```sh
-   yarn install
+   npm install
    ```
 
 3. **Start the development server**
@@ -47,6 +48,8 @@
    ```
 
    The site will be available at `http://localhost:8080`
+
+> **Note:** Some deprecation warnings may appear during installation. These are from Gatsby's internal dependencies and do not affect the functionality of the site.
 
 ## 🚀 Building & Deployment
 
