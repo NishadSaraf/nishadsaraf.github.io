@@ -53,21 +53,16 @@ const StyledTimeline = styled.div`
 const StyledTimelineItem = styled.div`
   position: relative;
   padding-bottom: 50px;
-  opacity: ${({ isActive }) => (isActive ? 1 : 0.6)};
   transition: opacity 0.3s ease;
 
   &:last-child {
     padding-bottom: 0;
   }
 
-  &:hover {
-    opacity: 1;
-  }
-
   /* Timeline node */
   .timeline-node {
     position: absolute;
-    left: -30px;
+    left: -21px;
     top: 5px;
     width: 18px;
     height: 18px;
@@ -77,6 +72,8 @@ const StyledTimelineItem = styled.div`
     cursor: pointer;
     transition: all 0.3s ease;
     z-index: 2;
+    transform: translateX(-50%);
+    opacity: 1;
 
     ${({ isActive }) =>
     isActive &&
@@ -86,11 +83,11 @@ const StyledTimelineItem = styled.div`
 
     &:hover {
       background: var(--green);
-      transform: scale(1.2);
+      transform: translateX(-50%) scale(1.2);
     }
 
     @media (max-width: 600px) {
-      left: -25px;
+      left: -19px;
       width: 14px;
       height: 14px;
     }
@@ -104,11 +101,13 @@ const StyledTimelineItem = styled.div`
     border: 1px solid ${({ isActive }) => (isActive ? 'var(--green)' : 'transparent')};
     transition: all 0.3s ease;
     cursor: pointer;
+    opacity: ${({ isActive }) => (isActive ? 1 : 0.6)};
 
     &:hover {
       border-color: var(--green);
       transform: translateX(5px);
       box-shadow: 0 10px 30px -15px var(--navy-shadow);
+      opacity: 1;
     }
 
     @media (max-width: 600px) {
