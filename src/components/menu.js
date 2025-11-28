@@ -218,8 +218,7 @@ const Menu = () => {
 
   const onKeyDown = e => {
     switch (e.key) {
-      case KEY_CODES.ESCAPE:
-      case KEY_CODES.ESCAPE_IE11: {
+      case KEY_CODES.ESCAPE: {
         setMenuOpen(false);
         break;
       }
